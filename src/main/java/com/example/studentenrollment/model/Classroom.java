@@ -1,8 +1,13 @@
 package com.example.studentenrollment.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
 @EqualsAndHashCode
 @Entity(name = "Classroom")
 @Table(name="Classroom")
@@ -17,6 +22,9 @@ public class Classroom {
     @Column(nullable = false, unique = true)
     private String classroomNumber;
 
+    @OneToMany(mappedBy = "classroom")
+    private Set<Course> courses = new HashSet<>();
+
     public long getId() {
         return id;
     }
@@ -28,6 +36,7 @@ public class Classroom {
     public int getNumSeats() {
         return numSeats;
     }
+
 
     @Override
     public String toString() {
