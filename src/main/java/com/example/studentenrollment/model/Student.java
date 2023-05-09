@@ -1,10 +1,11 @@
 package com.example.studentenrollment.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -15,6 +16,8 @@ import java.util.*;
 @EqualsAndHashCode
 @Entity(name = "Student")
 @Table
+@Getter
+@Setter
 public class Student extends User {
 
     @Id
@@ -28,7 +31,7 @@ public class Student extends User {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
     @Column(nullable = false)
@@ -39,7 +42,7 @@ public class Student extends User {
 
     @Transient
     @Formula("TIMESTAMPDIFF(YEAR,BIRTHDATE,CURDATE())")
-    private String age;
+    private int age;
 
     @OneToMany(mappedBy = "student")
     private Set<Enrollment> enrollments = new HashSet<>();
@@ -49,6 +52,18 @@ public class Student extends User {
     @JoinColumn(name = "fk_faculty_id", nullable = false)
     private Faculty faculty;
 
+
+    @Builder(builderMethodName = "studentBuilder")
+    Student(String firstName, String lastName, String email, String password, long id,
+            int yearOfStudy, LocalDate dateOfBirth, Faculty faculty){
+        super(email, password, id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.faculty = faculty;
+        this.yearOfStudy = yearOfStudy;
+    }
+
     public static class StudentBuilder {
 
         private List<Authority> authorities = Arrays.asList(
@@ -57,7 +72,7 @@ public class Student extends User {
                 );
     }
 
-    public Student(long id, String hashedPassword, String email, List<Authority> authorities) {
+   /* public Student(long id, String hashedPassword, String email, List<Authority> authorities) {
         super(id, hashedPassword, email, authorities);
-    }
+    }*/
 }

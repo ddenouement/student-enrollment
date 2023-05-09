@@ -2,6 +2,7 @@ package com.example.studentenrollment.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -37,7 +38,6 @@ public class Teacher extends User {
     public Teacher(long id, String hashedPassword, String email, List<Authority> authorities) {
         super(id, hashedPassword, email, authorities);
     }
-
 
     public static class TeacherBuilder {
 
